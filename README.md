@@ -1,5 +1,19 @@
 # Does spatial context help predict gene expression from histology?
 
+I got interested in this after reading the HEST-1k paper and realizing how
+much of computational pathology comes down to: can a model actually read
+biology out of a picture of stained tissue? I wanted to get my hands dirty
+with a real spatial transcriptomics dataset, on a real HPC cluster, rather
+than just reading about the field - and I wanted to actually extend a paper's
+method with my own idea, not just re-run someone else's code. This project is
+the result: a from-scratch reimplementation of one piece of the HEST-Benchmark,
+plus a genuine methodological fix I ran into along the way (mismatched gene
+panels breaking the pooling step), plus my own hypothesis about whether
+spatial neighborhood context improves prediction, tested on two different
+cancer types. It's a small project, but everything in it is real - real data,
+real compute, and a real (if modest) result.
+
+
 This project builds on the HEST-Benchmark from the HEST-1k paper (Jaume et al.,
 NeurIPS 2024, "HEST-1k: A Dataset for Spatial Transcriptomics and Histology
 Image Analysis" - https://arxiv.org/abs/2406.16192, data/code at
@@ -158,6 +172,14 @@ aggregation does better, which would be the natural next thing to try.
     # bigger task, use the sbatch job instead of running interactively
     hf download MahmoodLab/hest-bench --repo-type dataset --include "CCRCC/*" --local-dir data
     sbatch run_ccrcc.sbatch
+
+## License
+
+This repo's own code is released under the MIT license (see LICENSE) - use
+it, fork it, adapt it. That's separate from the underlying HEST-1k data,
+which stays under the original authors' CC BY-NC-SA 4.0 license (see below):
+non-commercial use, share-alike, with attribution. If you use the data itself
+outside of this repo, that license is what governs it, not mine.
 
 ## Credit
 
