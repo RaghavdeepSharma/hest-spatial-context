@@ -28,7 +28,7 @@ def main():
 
     print("selecting genes...")
     all_h5ad = sorted(glob.glob(os.path.join(adata_dir, "*.h5ad")))
-    top_genes, gene_idx = select_benchmark_genes(all_h5ad)
+    top_genes = select_benchmark_genes(all_h5ad)
     print(f"selected genes: {list(top_genes)}\n")
 
     train_files = sorted(glob.glob(os.path.join(splits_dir, "train_*.csv")))
@@ -36,7 +36,7 @@ def main():
     fold_pairs = list(zip(train_files, test_files))
     print(f"found {len(fold_pairs)} folds\n")
 
-    run_cross_validation(fold_pairs, embeddings_dir, adata_dir, gene_idx, n_pca=args.n_pca)
+    run_cross_validation(fold_pairs, embeddings_dir, adata_dir, top_genes, n_pca=args.n_pca)
 
 
 if __name__ == "__main__":

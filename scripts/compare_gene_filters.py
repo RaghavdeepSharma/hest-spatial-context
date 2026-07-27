@@ -20,9 +20,9 @@ from gene_selection import select_benchmark_genes
 
 def run_variant(label, drop_ribo_mito, all_h5ad, fold_pairs, embeddings_dir, adata_dir, n_pca):
     print(f"\n=== {label} ===")
-    top_genes, gene_idx = select_benchmark_genes(all_h5ad, drop_ribo_mito=drop_ribo_mito)
+    top_genes = select_benchmark_genes(all_h5ad, drop_ribo_mito=drop_ribo_mito)
     print(f"genes: {list(top_genes)}\n")
-    scores = run_cross_validation(fold_pairs, embeddings_dir, adata_dir, gene_idx, n_pca=n_pca)
+    scores = run_cross_validation(fold_pairs, embeddings_dir, adata_dir, top_genes, n_pca=n_pca)
     return scores
 
 
