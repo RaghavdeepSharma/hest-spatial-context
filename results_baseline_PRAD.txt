@@ -1,0 +1,18 @@
+selecting genes...
+selected genes: ['PLA2G2A', 'S100A6', 'SLC45A3', 'ACTG2', 'TMSB10', 'IGKC', 'DBI', 'ACPP', 'SPON2', 'HINT1', 'UQCRQ', 'RACK1', 'EEF1A1', 'NPY', 'AZGP1', 'NKX3-1', 'TPM2', 'PTGDS', 'FTH1', 'FAU', 'MALAT1', 'TAGLN', 'MSMB', 'ADIRF', 'ACTA2', 'H2AFJ', 'NACA', 'TPT1', 'DHRS7', 'RDH11', 'SERF2', 'B2M', 'MT2A', 'MT1E', 'MT1G', 'SNHG25', 'ACTG1', 'P4HB', 'SEC11C', 'CST3', 'MYL9', 'CFD', 'UBA52', 'FXYD3', 'FTL', 'KLK3', 'KLK2', 'KLK4', 'TMPRSS2', 'TFF3']
+
+found 2 folds
+
+fold 0: 15 train samples, 8 test samples, mean Pearson = 0.3755
+fold 1: 8 train samples, 15 test samples, mean Pearson = 0.3577
+
+overall: 0.3666 +/- 0.0089
+selecting genes...
+selected genes: ['PLA2G2A', 'S100A6', 'SLC45A3', 'ACTG2', 'TMSB10', 'IGKC', 'DBI', 'ACPP', 'SPON2', 'HINT1', 'UQCRQ', 'RACK1', 'EEF1A1', 'NPY', 'AZGP1', 'NKX3-1', 'TPM2', 'PTGDS', 'FTH1', 'FAU', 'MALAT1', 'TAGLN', 'MSMB', 'ADIRF', 'ACTA2', 'H2AFJ', 'NACA', 'TPT1', 'DHRS7', 'RDH11', 'SERF2', 'B2M', 'MT2A', 'MT1E', 'MT1G', 'SNHG25', 'ACTG1', 'P4HB', 'SEC11C', 'CST3', 'MYL9', 'CFD', 'UBA52', 'FXYD3', 'FTL', 'KLK3', 'KLK2', 'KLK4', 'TMPRSS2', 'TFF3']
+
+found 2 folds
+
+fold 0: 15 train samples, 8 test samples, mean Pearson = 0.3755
+fold 1: 8 train samples, 15 test samples, mean Pearson = 0.3577
+
+overall: 0.3666 +/- 0.0089

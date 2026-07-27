@@ -1,0 +1,21 @@
+
+=== original (ribo/mito kept) ===
+genes: ['PLA2G2A', 'RPS8', 'RPS27', 'RPS27A', 'RPL37A', 'RPL32', 'ACPP', 'RPL34', 'RPL37', 'RPS23', 'RPS14', 'RPS18', 'EEF1A1', 'RPS12', 'NPY', 'AZGP1', 'RPS4X', 'RPL39', 'RPL10', 'RPL30', 'RPL8', 'RPS6', 'RPL12', 'RPL7A', 'MSMB', 'RPS24', 'RPL41', 'TPT1', 'RPS29', 'B2M', 'RPLP1', 'RPS2', 'RPL13', 'RPL26', 'RPS15', 'RPL36', 'RPS28', 'RPS19', 'RPL18', 'RPL13A', 'KLK3', 'KLK2', 'RPL28', 'MT-CO1', 'MT-CO2', 'MT-ATP6', 'MT-CO3', 'MT-ND3', 'MT-ND4', 'MT-CYB']
+
+fold 0: 15 train samples, 8 test samples, mean Pearson = 0.3548
+fold 1: 8 train samples, 15 test samples, mean Pearson = 0.3094
+
+overall: 0.3321 +/- 0.0227
+
+=== filtered (ribo/mito dropped) ===
+genes: ['PLA2G2A', 'S100A6', 'SLC45A3', 'ACTG2', 'TMSB10', 'IGKC', 'DBI', 'ACPP', 'SPON2', 'HINT1', 'UQCRQ', 'RACK1', 'EEF1A1', 'NPY', 'AZGP1', 'NKX3-1', 'TPM2', 'PTGDS', 'FTH1', 'FAU', 'MALAT1', 'TAGLN', 'MSMB', 'ADIRF', 'ACTA2', 'H2AFJ', 'NACA', 'TPT1', 'DHRS7', 'RDH11', 'SERF2', 'B2M', 'MT2A', 'MT1E', 'MT1G', 'SNHG25', 'ACTG1', 'P4HB', 'SEC11C', 'CST3', 'MYL9', 'CFD', 'UBA52', 'FXYD3', 'FTL', 'KLK3', 'KLK2', 'KLK4', 'TMPRSS2', 'TFF3']
+
+fold 0: 15 train samples, 8 test samples, mean Pearson = 0.3755
+fold 1: 8 train samples, 15 test samples, mean Pearson = 0.3577
+
+overall: 0.3666 +/- 0.0089
+
+=== summary ===
+variant                            mean      std
+original (ribo/mito kept)        0.3321   0.0227
+filtered (ribo/mito dropped)     0.3666   0.0089
