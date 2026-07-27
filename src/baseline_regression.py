@@ -31,10 +31,12 @@ def build_model(n_pca, n_genes):
     ])
 
 
-def load_sample_xy(sample_id, embeddings_dir, adata_dir, gene_idx):
+def load_sample_xy(sample_id, embeddings_dir, adata_dir, gene_names):
     """Load one sample's embeddings and its expression for the selected
-    genes, aligned by barcode. gene_idx are column positions into the
-    FULL (unfiltered) gene list from gene_selection.py."""
+    genes, aligned by barcode. gene_names are gene symbols, looked up
+    fresh against THIS sample's own var_names - not a precomputed
+    position - since different samples in the same task can be processed
+    against different reference gene panels with different orderings."""
     emb_file = np.load(os.path.join(embeddings_dir, f"{sample_id}.npz"))
     emb_barcodes = emb_file["barcodes"]
     embeddings = emb_file["embeddings"]
@@ -44,6 +46,14 @@ def load_sample_xy(sample_id, embeddings_dir, adata_dir, gene_idx):
     if hasattr(counts, "todense"):
         counts = np.asarray(counts.todense())
     expr_barcodes = np.asarray(adata.obs_names)
+    sample_genes = np.asarray(adata.var_names)
+
+    # resolve each selected gene's column position in THIS sample's own
+    # gene list - this only works because gene_names was built from genes
+    # common to every sample in the task, so every name is guaranteed to
+    # exist here, just not necessarily at the same position as elsewhere
+    gene_lookup = {g: i for i, g in enumerate(sample_genes)}
+    gene_col_idx = [gene_lookup[g] for g in gene_names]
 
     # the embedding file and the h5ad file aren't guaranteed to list spots
     # in the same order, so match them up by barcode rather than assuming
@@ -57,15 +67,15 @@ def load_sample_xy(sample_id, embeddings_dir, adata_dir, gene_idx):
             keep_expr.append(j)
 
     X = embeddings[keep_emb]
-    y = np.log1p(counts[keep_expr][:, gene_idx])
+    y = np.log1p(counts[keep_expr][:, gene_col_idx])
     return X, y
 
 
-def load_fold_xy(sample_ids, embeddings_dir, adata_dir, gene_idx):
+def load_fold_xy(sample_ids, embeddings_dir, adata_dir, gene_names):
     """Stack every sample in a fold's sample list into one X, y pair."""
     X_parts, y_parts = [], []
     for sid in sample_ids:
-        X, y = load_sample_xy(sid, embeddings_dir, adata_dir, gene_idx)
+        X, y = load_sample_xy(sid, embeddings_dir, adata_dir, gene_names)
         X_parts.append(X)
         y_parts.append(y)
     return np.concatenate(X_parts), np.concatenate(y_parts)
@@ -83,18 +93,18 @@ def pearson_per_gene(y_true, y_pred):
     return scores
 
 
-def run_cross_validation(fold_pairs, embeddings_dir, adata_dir, gene_idx, n_pca=256):
+def run_cross_validation(fold_pairs, embeddings_dir, adata_dir, gene_names, n_pca=256):
     """fold_pairs: list of (train_csv_path, test_csv_path), the authors'
     own patient-stratified splits. Returns the mean Pearson per fold."""
-    n_genes = len(gene_idx)
+    n_genes = len(gene_names)
     fold_scores = []
 
     for i, (train_csv, test_csv) in enumerate(fold_pairs):
         train_ids = pd.read_csv(train_csv)["sample_id"].tolist()
         test_ids = pd.read_csv(test_csv)["sample_id"].tolist()
 
-        X_train, y_train = load_fold_xy(train_ids, embeddings_dir, adata_dir, gene_idx)
-        X_test, y_test = load_fold_xy(test_ids, embeddings_dir, adata_dir, gene_idx)
+        X_train, y_train = load_fold_xy(train_ids, embeddings_dir, adata_dir, gene_names)
+        X_test, y_test = load_fold_xy(test_ids, embeddings_dir, adata_dir, gene_names)
 
         n_pca_actual = min(n_pca, X_train.shape[0], X_train.shape[1])
         model = build_model(n_pca=n_pca_actual, n_genes=n_genes)

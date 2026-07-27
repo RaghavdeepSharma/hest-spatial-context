@@ -15,22 +15,25 @@ def load_counts(h5ad_path):
     genes = np.asarray(adata.var_names)
     return counts, genes
 
-def check_same_genes(gene_lists):
-    """Confirm every sample reports the exact same genes in the exact same
-    order. If this isn't true, stacking count matrices column-wise would
-    silently mix up which column means which gene."""
-    reference = gene_lists[0]
-    for i, genes in enumerate(gene_lists[1:], start=1):
-        if not np.array_equal(reference, genes):
-            raise ValueError(
-                f"sample {i} has a different gene list than sample 0 - "
-                f"cannot safely stack their count matrices"
-            )
-    return reference
+def common_genes(gene_lists):
+    """Find the genes present in every sample. Some cohorts mix samples
+    processed against different reference panels (e.g. a full
+    whole-transcriptome reference vs. a smaller filtered/probe-based one),
+    so requiring an exact identical gene list across all samples is too
+    strict - taking the intersection is the safe way to combine them
+    without ever mixing up which column means which gene."""
+    common = set(gene_lists[0])
+    for genes in gene_lists[1:]:
+        common &= set(genes)
+    if len(common) == 0:
+        raise ValueError("no genes are shared across every sample - cannot pool counts")
+    return np.array(sorted(common))
+
 
 def pool_counts(h5ad_paths):
     """Load every sample's counts and stack them into one big matrix,
-    after confirming they all describe the same genes in the same order."""
+    restricted to genes common to every sample so a mismatched gene panel
+    on any one sample can't silently corrupt the column alignment."""
     all_counts = []
     all_genes = []
     for path in h5ad_paths:
@@ -38,8 +41,15 @@ def pool_counts(h5ad_paths):
         all_counts.append(counts)
         all_genes.append(genes)
 
-    reference_genes = check_same_genes(all_genes)
-    pooled = np.concatenate(all_counts, axis=0)
+    reference_genes = common_genes(all_genes)
+
+    aligned_counts = []
+    for counts, genes in zip(all_counts, all_genes):
+        lookup = {g: i for i, g in enumerate(genes)}
+        col_idx = [lookup[g] for g in reference_genes]
+        aligned_counts.append(counts[:, col_idx])
+
+    pooled = np.concatenate(aligned_counts, axis=0)
     return pooled, reference_genes
 
 
@@ -87,10 +97,7 @@ def select_benchmark_genes(h5ad_paths, n_top=50, min_frac=0.10, drop_ribo_mito=T
         filtered_counts, filtered_genes = filter_ribo_mito(filtered_counts, filtered_genes)
     top_genes, _ = select_top_variable_genes(filtered_counts, filtered_genes, n_top)
 
-    # map back to indices in the ORIGINAL gene list (before filtering),
-    # since that's what every sample's raw .h5ad will be indexed by
-    original_idx = np.array([np.where(genes == g)[0][0] for g in top_genes])
-    return top_genes, original_idx
+    return top_genes
 
 
 if __name__ == "__main__":
