@@ -80,6 +80,9 @@ signal.
 
 ## Results
 
+![baseline vs neighborhood context](results_plot.png)
+
+
 **PRAD** (2 folds, 2 patients):
 
 | variant                    | mean Pearson | std    |
