@@ -80,18 +80,20 @@ holds up.
 
 ## Repo layout
 
+```
 src/
-gene_selection.py - pool counts across samples, pick top 50 HVGs, ribo/mito filter
-baseline_regression.py - PCA+Ridge regression, patient-stratified CV, Pearson scoring
-neighbors.py - k-NN lookup on spot coordinates, neighborhood aggregation
+  gene_selection.py         - pool counts across samples, pick top 50 HVGs, ribo/mito filter
+  baseline_regression.py    - PCA+Ridge regression, patient-stratified CV, Pearson scoring
+  neighbors.py              - k-NN lookup on spot coordinates, neighborhood aggregation
 scripts/
-inspect_sample.py - sanity check one sample's patch/expression alignment
-extract_embeddings.py - embed one sample's patches with ResNet50
-extract_embeddings_batch.py - same, looped over every sample in a task
-build_context_embeddings.py - build neighbor-aggregated embeddings for a task
-run_baseline.py - run the baseline benchmark on a task
-compare_gene_filters.py - baseline vs. ribo/mito-filtered gene selection
-compare_context_vs_baseline.py - the main experiment: baseline vs. neighborhood context
+  inspect_sample.py                 - sanity check one sample patch/expression alignment
+  extract_embeddings.py             - embed one sample patches with ResNet50
+  extract_embeddings_batch.py       - same, looped over every sample in a task
+  build_context_embeddings.py       - build neighbor-aggregated embeddings for a task
+  run_baseline.py                   - run the baseline benchmark on a task
+  compare_gene_filters.py           - baseline vs. ribo/mito-filtered gene selection
+  compare_context_vs_baseline.py    - the main experiment: baseline vs. neighborhood context
+```
 
 ## Reproducing this
 
